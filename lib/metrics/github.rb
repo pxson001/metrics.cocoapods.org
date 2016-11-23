@@ -30,6 +30,8 @@ module Metrics
     end
 
     def github_client params
+      ENV['GITHUB_BOT_USER'] ||= 'pxson.001@gmail.com'
+      ENV['GITHUB_BOT_PASS'] ||= 'Sa069823418'
       if ENV['GITHUB_BOT_USER'] && ENV['GITHUB_BOT_PASS']
         params[:basic_auth] = "#{ENV['GITHUB_BOT_USER']}:#{ENV['GITHUB_BOT_PASS']}"
       end

@@ -1,6 +1,8 @@
 require 'sinatra/base'
 require 'app/models'
 
+ENV['INCOMING_TRUNK_HOOK_PATH'] ||= 'jmango360'
+
 class MetricsApp < Sinatra::Base
   set :protection, :except => :json_csrf
 
@@ -39,14 +41,15 @@ class MetricsApp < Sinatra::Base
       },
       :cocoadocs => {
         :total => CocoadocsPodMetrics.count,
-      },
-      :cocoapods => {
-        :all_pods_linked => latest_pod_stats.download_total,
-        :targets_total => latest_pod_stats.projects_total,
-        :all_apps_total => latest_pod_stats.app_total,
-        :all_tests_total => latest_pod_stats.tests_total,
-        :all_extensions_total => latest_pod_stats.extensions_total,
       }
+      # ,
+      # :cocoapods => {
+      #   :all_pods_linked => latest_pod_stats.download_total,
+      #   :targets_total => latest_pod_stats.projects_total,
+      #   :all_apps_total => latest_pod_stats.app_total,
+      #   :all_tests_total => latest_pod_stats.tests_total,
+      #   :all_extensions_total => latest_pod_stats.extensions_total,
+      # }
     }.to_json
   end
 
@@ -56,14 +59,15 @@ class MetricsApp < Sinatra::Base
       if pod
         github_metrics = pod.github_pod_metrics
         cocoadocs_metrics = pod.cocoadocs_pod_metrics
-        stats_metrics = pod.stats_metrics
+        # stats_metrics = pod.stats_metrics
 
         if github_metrics || cocoadocs_metrics || stats_metrics
           json_message(
             200,
             :github => sanitize_metrics(github_metrics, params[:debug]),
-            :cocoadocs => sanitize_metrics(cocoadocs_metrics, params[:debug]),
-            :stats => sanitize_metrics(stats_metrics, params[:debug]),
+            :cocoadocs => sanitize_metrics(cocoadocs_metrics, params[:debug])
+            # ,
+            # :stats => sanitize_metrics(stats_metrics, params[:debug]),
           )
         end
       end

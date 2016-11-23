@@ -24,7 +24,7 @@ begin
 
   desc 'Starts processes for local development'
   task :serve do
-    exec 'env PORT=4567 RACK_ENV=development foreman start'
+    exec 'env PORT=8888 RACK_ENV=development foreman start'
   end
 
   desc 'Run the specs'
